@@ -2,30 +2,20 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const path = require('path');
-const cors = require('cors'); // Import CORS
-
+const cors = require('cors');  // Import CORS
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: 'https://ranvijayshar.github.io/omechat/', // Allow all origins, or specify the frontend URL
-    methods: ['GET', 'POST']
-  }
-});
+const io = socketIo(server);
 
-// Use CORS middleware
-app.use(cors());
+// Enable CORS for your frontend URL (replace with your actual frontend URL)
+const corsOptions = {
+  origin: 'https://omechat-45sm.vercel.app',  // Your frontend URL
+  methods: 'GET,POST',
+  allowedHeaders: 'Content-Type,Authorization',
+};
 
-// Serve static files from the "public" directory
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Serve the main HTML file
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-
+app.use(cors(corsOptions));  // Use CORS middleware with the specific options
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
